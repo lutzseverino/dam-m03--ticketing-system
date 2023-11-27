@@ -31,12 +31,10 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            <!-- Add other managed dependencies if needed -->
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- Add any common dependencies for your modules here -->
     </dependencies>
 
 </project>
