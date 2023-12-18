@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cat.lasalle.client.SignInController">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="280.0" style="-fx-background-color: #1b2c65;">
+         <children>
+            <Label id="text-title" alignment="CENTER" layoutX="23.0" layoutY="34.0" text="LS Ticketing System" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="107.0" layoutY="83.0" text="Sign in" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="20.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="lsStarImage" fitHeight="150.0" fitWidth="200.0" layoutX="41.0" layoutY="208.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </AnchorPane>
+      <TextField layoutX="353.0" layoutY="149.0" promptText="Username">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="passwordField" layoutX="353.0" layoutY="187.0" promptText="Password">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </PasswordField>
+      <Button layoutX="406.0" layoutY="227.0" mnemonicParsing="false" text="Sign in" />
+      <Button fx:id="showPassword" layoutX="522.0" layoutY="187.0" mnemonicParsing="false"/>
+   </children>
+</AnchorPane>
