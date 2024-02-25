@@ -5,6 +5,9 @@ import cat.lasalle.server.model.Ticket;
 import cat.lasalle.server.model.mapper.TicketMapper;
 import cat.lasalle.server.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,11 +24,7 @@ public class TicketService {
     }
 
     public TicketDTO create(TicketDTO dto) {
-        Ticket entity = mapper.mapToEntity(dto);
-
-        Ticket createdTicket = repository.save(entity);
-
-        return mapper.mapToDTO(createdTicket);
+        return update(dto);
     }
 
     public TicketDTO readById(String id) {
@@ -34,16 +33,19 @@ public class TicketService {
         return mapper.mapToDTO(entity);
     }
 
-    public List<TicketDTO> readAll() {
-        List<Ticket> entities = repository.findAll();
+    public List<TicketDTO> readAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Ticket> entities = repository.findAll(pageable);
 
         return entities.stream().map(mapper::mapToDTO).toList();
     }
 
-    public void update(TicketDTO dto) {
+    public TicketDTO update(TicketDTO dto) {
         Ticket entity = mapper.mapToEntity(dto);
 
-        repository.save(entity);
+        Ticket updatedTicket = repository.save(entity);
+
+        return mapper.mapToDTO(updatedTicket);
     }
 
     public void delete(String id) {
