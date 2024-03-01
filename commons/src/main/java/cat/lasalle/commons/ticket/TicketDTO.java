@@ -22,4 +22,8 @@ import java.util.*;
     public TicketDTO(String subject) {
         this.subject = subject;
     }
+
+    public TicketDTO() {
+        this.subject = "";
+    }
 }
