@@ -134,8 +134,8 @@ public abstract class WebResource<T> {
      * @return a list of resources
      * @throws WebResourceGetException if the server responds with a status code other than 200
      */
-    public List<T> readAll(int page, int size) {
-        HttpRequest request = buildGetRequest(url + "?page=" + page + "&size=" + size);
+    public List<T> readAll() {
+        HttpRequest request = buildGetRequest(url);
         HttpResponse<String> response = sendRequest(request);
 
         try {

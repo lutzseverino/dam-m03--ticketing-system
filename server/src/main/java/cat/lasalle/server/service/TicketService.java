@@ -33,8 +33,8 @@ public class TicketService {
         return mapper.mapToDTO(entity);
     }
 
-    public List<TicketDTO> readAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public List<TicketDTO> readAll() {
+        Pageable pageable = PageRequest.of(0, 10);
         Page<Ticket> entities = repository.findAll(pageable);
 
         return entities.stream().map(mapper::mapToDTO).toList();

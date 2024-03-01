@@ -34,8 +34,8 @@ public class TicketController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TicketDTO>> readAllTickets(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size) {
-        return ResponseEntity.ok(ticketService.readAll(page, size));
+    public ResponseEntity<List<TicketDTO>> readAllTickets() {
+        return ResponseEntity.ok(ticketService.readAll());
     }
 
     @GetMapping("/{id}")
