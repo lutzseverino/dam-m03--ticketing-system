@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.*;
 
 @Getter @Setter @Document(collection = "tickets") public class Ticket {
-    @Id private final String id;
+    @Id private String id;
     @CreatedDate private Date creationDate;
     private final String subject;
     private Set<UserDTO> assignees = new HashSet<>();
