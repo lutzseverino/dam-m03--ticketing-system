@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ticketing-system
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATA_MONGODB_HOST: db
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
+      SPRING_DATA_MONGODB_DATABASE: dam-m03
+      SPRING_DATA_MONGODB_USERNAME: ${MONGODB_USERNAME}
+      SPRING_DATA_MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+  db:
+    image: mongo:latest
+    command: mongod --auth
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+volumes:
+  mongodb_data:
