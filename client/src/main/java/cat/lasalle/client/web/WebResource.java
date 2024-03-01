@@ -27,8 +27,7 @@ public abstract class WebResource<T> {
     protected WebResource(Class<T> type, String resourcePath) {
         this.type = type;
         this.resourcePath = resourcePath;
-
-        this.url = "http://localhost:8080/" + resourcePath + "/"; // TODO: get from config
+        this.url = "http://localhost:8080/" + resourcePath; // TODO: get from config
     }
 
     protected WebResource(Class<T> type, String resourcePath, int timeout) {
@@ -44,7 +43,7 @@ public abstract class WebResource<T> {
             if (response.statusCode() == 201) {
                 return objectMapper.readValue(response.body(), type);
             } else {
-                throw new WebResourceGetException("Error: " + response.statusCode());
+                throw new WebResourceGetException("Error creating resource: " + response.statusCode());
             }
         } catch (IOException e) {
             throw new WebResourceGetException(e);
@@ -52,40 +51,39 @@ public abstract class WebResource<T> {
     }
 
     public T readById(String id) throws WebResourceGetException {
-        try {
-            HttpRequest request = buildGetRequest(url + id);
-            HttpResponse<String> response = sendRequest(request);
+        HttpRequest request = buildGetRequest(url + "/" + id);
+        HttpResponse<String> response = sendRequest(request);
 
-            if (response.statusCode() == 200) {
-                return objectMapper.readValue(response.body(), type);
-            } else {
-                throw new WebResourceGetException("Error: " + response.statusCode());
-            }
+        try {
+            if (response.statusCode() != 200)
+                throw new WebResourceGetException("Error reading resource by ID: " + response.statusCode());
+
+            return objectMapper.readValue(response.body(), type);
         } catch (IOException e) {
             throw new WebResourceGetException(e);
         }
     }
 
     public T update(T t) {
-        try {
-            HttpRequest request = buildPutRequest(url, t);
-            HttpResponse<String> response = sendRequest(request);
+        HttpRequest request = buildPutRequest(url, t);
+        HttpResponse<String> response = sendRequest(request);
 
-            if (response.statusCode() == 200) {
-                return objectMapper.readValue(response.body(), type);
-            } else {
-                throw new WebResourceGetException("Error: " + response.statusCode());
-            }
+        try {
+            if (response.statusCode() != 200)
+                throw new WebResourceGetException("Error updating resource: " + response.statusCode());
+
+            return objectMapper.readValue(response.body(), type);
         } catch (IOException e) {
             throw new WebResourceGetException(e);
         }
     }
 
     public void delete(String id) {
-        HttpRequest request = buildDeleteRequest(url + id);
+        HttpRequest request = buildDeleteRequest(url + "/" + id);
         HttpResponse<String> response = sendRequest(request);
 
-        if (response.statusCode() != 200) throw new WebResourceGetException("Error: " + response.statusCode());
+        if (response.statusCode() != 200)
+            throw new WebResourceGetException("Error deleting resource: " + response.statusCode());
     }
 
     public List<T> readAll(int page, int size) {
@@ -93,11 +91,10 @@ public abstract class WebResource<T> {
         HttpResponse<String> response = sendRequest(request);
 
         try {
-            if (response.statusCode() == 200) {
-                return objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, type));
-            } else {
-                throw new WebResourceGetException("Error: " + response.statusCode());
-            }
+            if (response.statusCode() != 200)
+                throw new WebResourceGetException("Error reading all resources: " + response.statusCode());
+
+            return objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, type));
         } catch (IOException e) {
             throw new WebResourceGetException(e);
         }
