@@ -47,7 +47,7 @@ public class TicketController {
                 ResponseEntity.ok(ticket);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     public ResponseEntity<TicketDTO> updateTicket(@RequestBody TicketDTO ticketDTO) {
         TicketDTO updatedTicket = ticketService.update(ticketDTO);
 
