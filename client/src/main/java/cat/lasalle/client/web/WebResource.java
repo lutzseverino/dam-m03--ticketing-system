@@ -24,17 +24,37 @@ public abstract class WebResource<T> {
     private final Class<T> type;
     private int timeout = 20;
 
+    /**
+     * Constructs a new WebResource with the specified type and resource path.
+     *
+     * @param type         the class of the type parameter
+     * @param resourcePath the path of the resource
+     */
     protected WebResource(Class<T> type, String resourcePath) {
         this.type = type;
         this.resourcePath = resourcePath;
         this.url = "http://localhost:8080/" + resourcePath; // TODO: get from config
     }
 
+    /**
+     * Constructs a new WebResource with the specified type, resource path, and timeout.
+     *
+     * @param type         the class of the type parameter
+     * @param resourcePath the path of the resource
+     * @param timeout      the timeout for the HTTP requests
+     */
     protected WebResource(Class<T> type, String resourcePath, int timeout) {
         this(type, resourcePath);
         this.timeout = timeout;
     }
 
+    /**
+     * Creates a new resource on the server.
+     *
+     * @param t the resource to create
+     * @return the created resource
+     * @throws WebResourceGetException if the server responds with a status code other than 201
+     */
     public T create(T t) {
         try {
             HttpRequest request = buildPostRequest(url, t);
@@ -50,6 +70,13 @@ public abstract class WebResource<T> {
         }
     }
 
+    /**
+     * Reads a resource from the server by its ID.
+     *
+     * @param id the ID of the resource to read
+     * @return the read resource
+     * @throws WebResourceGetException if the server responds with a status code other than 200
+     */
     public T readById(String id) throws WebResourceGetException {
         HttpRequest request = buildGetRequest(url + "/" + id);
         HttpResponse<String> response = sendRequest(request);
@@ -64,6 +91,13 @@ public abstract class WebResource<T> {
         }
     }
 
+    /**
+     * Updates a resource on the server.
+     *
+     * @param t the resource to update
+     * @return the updated resource
+     * @throws WebResourceGetException if the server responds with a status code other than 200
+     */
     public T update(T t) {
         HttpRequest request = buildPutRequest(url, t);
         HttpResponse<String> response = sendRequest(request);
@@ -78,6 +112,12 @@ public abstract class WebResource<T> {
         }
     }
 
+    /**
+     * Deletes a resource from the server by its ID.
+     *
+     * @param id the ID of the resource to delete
+     * @throws WebResourceGetException if the server responds with a status code other than 200
+     */
     public void delete(String id) {
         HttpRequest request = buildDeleteRequest(url + "/" + id);
         HttpResponse<String> response = sendRequest(request);
@@ -86,6 +126,14 @@ public abstract class WebResource<T> {
             throw new WebResourceGetException("Error deleting resource: " + response.statusCode());
     }
 
+    /**
+     * Reads all resources from the server.
+     *
+     * @param page the page number to read
+     * @param size the number of resources per page
+     * @return a list of resources
+     * @throws WebResourceGetException if the server responds with a status code other than 200
+     */
     public List<T> readAll(int page, int size) {
         HttpRequest request = buildGetRequest(url + "?page=" + page + "&size=" + size);
         HttpResponse<String> response = sendRequest(request);
@@ -100,6 +148,13 @@ public abstract class WebResource<T> {
         }
     }
 
+    /**
+     * Sends the HTTP request and returns the response.
+     *
+     * @param request the HTTP request to send
+     * @return the HTTP response
+     * @throws WebResourceRequestException if an I/O error occurs when sending or receiving
+     */
     private HttpResponse<String> sendRequest(HttpRequest request) {
         try {
             return client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -109,12 +164,26 @@ public abstract class WebResource<T> {
         }
     }
 
+    /**
+     * Builds a GET request with the specified URL.
+     *
+     * @param url the URL for the GET request
+     * @return the built GET request
+     */
     private HttpRequest buildGetRequest(String url) {
         return getDefaultRequest(url)
                 .GET()
                 .build();
     }
 
+    /**
+     * Builds a POST request with the specified URL and body.
+     *
+     * @param url the URL for the POST request
+     * @param t   the body of the POST request
+     * @return the built POST request
+     * @throws WebResourcePostException if an error occurs when converting the body to JSON
+     */
     private HttpRequest buildPostRequest(String url, T t) {
         try {
             return getDefaultRequest(url)
@@ -126,6 +195,14 @@ public abstract class WebResource<T> {
         }
     }
 
+    /**
+     * Builds a PUT request with the specified URL and body.
+     *
+     * @param url the URL for the PUT request
+     * @param t   the body of the PUT request
+     * @return the built PUT request
+     * @throws WebResourcePutException if an error occurs when converting the body to JSON
+     */
     private HttpRequest buildPutRequest(String url, T t) {
         try {
             return getDefaultRequest(url)
@@ -137,12 +214,24 @@ public abstract class WebResource<T> {
         }
     }
 
+    /**
+     * Builds a DELETE request with the specified URL.
+     *
+     * @param url the URL for the DELETE request
+     * @return the built DELETE request
+     */
     private HttpRequest buildDeleteRequest(String url) {
         return getDefaultRequest(url)
                 .DELETE()
                 .build();
     }
 
+    /**
+     * Returns a default HttpRequest.Builder with the specified URL and timeout.
+     *
+     * @param url the URL for the request
+     * @return the default HttpRequest.Builder
+     */
     private HttpRequest.Builder getDefaultRequest(String url) {
         return HttpRequest.newBuilder()
                 .uri(URI.create(url))
