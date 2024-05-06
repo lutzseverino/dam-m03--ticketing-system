@@ -5,7 +5,7 @@ import cat.lasalle.server.model.Ticket;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ReplyMapper.class, UserMapper.class})
 public interface TicketMapper {
     TicketMapper INSTANCE = Mappers.getMapper(TicketMapper.class);
 
