@@ -42,7 +42,7 @@
     </ChoiceBox>
 
     <HBox alignment="CENTER" GridPane.columnSpan="2" GridPane.rowIndex="5">
-        <Button text="Create Ticket" onAction="#createTicket" />
+        <Button fx:id="handleButtonAction" text="Create Ticket" onAction="#createTicket" />
 <!--        <Button text="Create Ticket" />-->
     </HBox>
 </GridPane>
