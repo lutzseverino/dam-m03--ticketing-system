@@ -10,21 +10,18 @@ services:
     depends_on:
       - db
     environment:
-      SPRING_DATA_MONGODB_HOST: db
-      SPRING_DATA_MONGODB_PORT: 27017
-      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
-      SPRING_DATA_MONGODB_DATABASE: dam-m03
-      SPRING_DATA_MONGODB_USERNAME: ${MONGODB_USERNAME}
-      SPRING_DATA_MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/dam-m03
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
   db:
-    image: mongo:latest
-    command: mongod --auth
+    image: mariadb:latest
     ports:
-      - "27017:27017"
+      - "3306:3306"
     volumes:
-      - mongodb_data:/data/db
+      - mariadb_data:/var/lib/mysql
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: dam-m03
 volumes:
-  mongodb_data:
+  mariadb_data:
